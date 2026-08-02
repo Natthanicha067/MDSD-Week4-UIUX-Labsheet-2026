@@ -928,10 +928,13 @@ Add brief comments explaining each section.
 
 | คำถาม | คำตอบ |
 |-------|-------|
-| AI ใช้ Widget อะไรสร้าง Avatar? | _________________ |
-| AI handle กรณี avatarUrl เป็น null อย่างไร? | _________________ |
-| AI ใช้ color จาก Theme หรือ hardcode? | _________________ |
-| มีส่วนไหนที่ควรปรับปรุง? | _________________ |
+| AI ใช้ Widget อะไรสร้าง Avatar? | ใช้ CircleAvatar สำหรับแสดงรูปโปรไฟล์แบบวงกลม |
+| AI handle กรณี avatarUrl เป็น null อย่างไร? | ถ้า avatarUrl == null จะไม่ใช้ backgroundImage และแสดง ตัวอักษรย่อ (Initials) จากชื่อผู้ใช้ผ่านตัวแปร _initials ภายใน Text แทน |
+| AI ใช้ color จาก Theme หรือ hardcode? | ใช้สีจาก Theme.of(context).colorScheme เช่น primaryContainer, onPrimaryContainer, onSurface, onSurfaceVariant ไม่ได้ Hardcode สี |
+| มีส่วนไหนที่ควรปรับปรุง? | - ควรตรวจสอบกรณี avatarUrl เป็น '' (String ว่าง) เพราะปัจจุบันตรวจเฉพาะ null
+- ควรเพิ่ม errorBuilder หรือใช้ FadeInImage เพื่อรองรับกรณีโหลดรูปจากอินเทอร์เน็ตไม่สำเร็จ
+- อาจกำหนด semanticsLabel เพื่อรองรับการเข้าถึง (Accessibility)
+- สามารถแยกข้อความในปุ่ม (Follow, Message) หรือ Callback (onPressed) ออกเป็นพารามิเตอร์ เพื่อให้ Widget นำกลับมาใช้ซ้ำได้ง่ายขึ้น |
 
 **ขั้นตอนที่ 4.4: นำ Code ไปใช้ใน Project**
 
@@ -955,7 +958,10 @@ Add brief comments explaining each section.
 5. ดู Code และ Widget Tree ที่ได้ และเปรียบเทียบกับ  Code และ Widget tree ที่เขียนเองในการทดลองที่ 3
    
 ```text
-เขียนผลการเปรียบเทียบที่นี่
+Code ที่ AI สร้างมีโครงสร้างเป็นระเบียบกว่า แยกส่วนด้วยเมธอด _buildStatColumn() ทำให้แก้ไขและนำกลับมาใช้ซ้ำได้ง่าย
+ใช้ Widget ตามแนวทาง Material Design 3 เช่น Card, FilledButton, OutlinedButton และอ้างอิง ThemeData เพื่อรองรับ Light/Dark Mode
+Widget Tree มีลำดับชัดเจน: Card → Padding → Column → CircleAvatar → Text → Row (Stats) → Row (Buttons) ทำให้อ่านและเข้าใจง่าย
+เมื่อเทียบกับโค้ดที่เขียนเองในการทดลองที่ 3 โค้ด AI มีการจัดโครงสร้างและการใช้ Theme ที่ดีกว่า ส่วนโค้ดที่เขียนเองแม้ทำงานได้ แต่ยังมีการเขียนซ้ำและปรับแต่ง Theme น้อยกว่า
 
 ```
 ---
@@ -971,6 +977,7 @@ Add brief comments explaining each section.
 2. รัน App → ตรวจสอบว่าทุก Text อ่านออกหรือไหม
 3. มีสีไหนที่ contrast ต่ำเกินไปไหม (ตัวอักษรจางบนพื้นหลังจาง)
 4. เปลี่ยนกลับเป็น `ThemeMode.system`
+<img width="1198" height="992" alt="Screenshot 2569-08-03 at 00 22 02" src="https://github.com/user-attachments/assets/35569e8d-5b2d-4de4-bfa9-fc739db9da9a" />
 
 
 // ยังไม่ต้องทำข้อ 5.2  5.3
@@ -1012,25 +1019,25 @@ IconButton(
 **ข้อ 1:** Material 3 ต่างจาก Material 2 อย่างไรในด้าน Color System? 
 
 ```
-คำตอบ: _______________________________________________
+คำตอบ: Material 3 มีระบบสี (Color Scheme) ที่ยืดหยุ่นกว่า Material 2 และรองรับ Dynamic Color
 ```
 
 **ข้อ 2:** เมื่อแปลง Figma Design เป็น Flutter Widget พบปัญหาอะไรบ้าง และแก้ไขอย่างไร?
 
 ```
-คำตอบ: _______________________________________________
+คำตอบ: พบปัญหาเรื่องการจัดวาง UI และ Error ของโค้ด แก้โดยปรับ Widget และแก้โค้ดให้ถูกต้อง
 ```
 
 **ข้อ 3:** Code ที่ AI สร้างให้นั้นสมบูรณ์แค่ไหน? ต้องปรับปรุงอะไรบ้าง?
 
 ```
-คำตอบ: _______________________________________________
+คำตอบ: AI สร้างโค้ดได้ดี แต่ยังต้องแก้ Error และปรับรายละเอียดของ UI
 ```
 
 **ข้อ 4:** ถ้าจะนำ UI ที่ออกแบบไปใช้กับ Project จริง จะปรับปรุงอะไรบ้าง?
 
 ```
-คำตอบ: _______________________________________________
+คำตอบ: เพิ่มการเชื่อมต่อฐานข้อมูล ปรับ UI และเพิ่มฟังก์ชันให้พร้อมใช้งานจริง
 ```
 
 ---
